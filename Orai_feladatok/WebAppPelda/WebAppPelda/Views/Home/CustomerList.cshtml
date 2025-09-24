@@ -1,0 +1,16 @@
+﻿@using WebAppPelda.Models
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Ügyfelek adatai</h1>
+    @foreach (Customer customer in Model)
+    {
+        <h2>Név: @(customer.Name)</h2>
+        <p>Telefonszám : @(customer.Phone)</p>
+        <p>Pontszám : @(customer.Score)</p>  
+    }
+    
+     
+</div>

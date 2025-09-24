@@ -1,0 +1,12 @@
+﻿@using WebAppPelda.Models
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Subpage</h1>
+    <p>Saját aloldal</a>.</p>
+     <p>@((Model as Customer).Name)</p>
+     <p>@((Model as Customer).Phone)</p>
+     <p>@((Model as Customer).Score)</p>
+</div>

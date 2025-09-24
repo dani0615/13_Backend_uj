@@ -1,0 +1,11 @@
+﻿Id;Name;Phone;Score
+1;John Doe;+123456789;85
+2;Jane Smith;+987654321;90
+3;Alice Johnson;+192837465;78
+4;Bob Brown;+564738291;88
+5;Charlie Davis;+102938475;92
+6;Diana Evans;+564738290;80
+7;Frank Green;+019283746;75
+8;Grace Harris;+564738292;89
+9;Hank Irving;+564738293;95
+10;Ivy Jackson;+564738294;82
