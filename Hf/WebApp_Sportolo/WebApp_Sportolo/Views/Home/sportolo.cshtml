@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+    }
+
+    .card {
+        max-width: 500px;
+        margin: auto;
+        border: 1px solid #ccc;
+        padding: 10px;
+    }
+
+        .card img {
+            width: 100%;
+            height: 150px;
+        }
+
+    ul {
+        padding: 0;
+        list-style: none;
+    }
+</style>
+
+<div class="text-center">
+    <div class="card">
+        <img src="@ViewData["PhotoUrl"]" alt="@ViewData["Name"]">
+        <h2>@ViewData["Name"]</h2>
+        <p><strong>Születési idő:</strong> @(((DateTime)ViewData["BirthDate"]).ToString("yyyy. MMMM dd."))</p>
+        <p><strong>Versenyszámok:</strong></p>
+        <ul>
+            @foreach (var eventItem in (List<string>)ViewData["Events"])
+            {
+                <li>@eventItem</li>
+            }
+        </ul>
+    </div>
+</div>
