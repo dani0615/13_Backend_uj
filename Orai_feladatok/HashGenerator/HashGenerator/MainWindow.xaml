@@ -134,7 +134,7 @@
                 <StackPanel>
                     <TextBlock Text="Bemeneti adatok" FontSize="18" Foreground="#8AB4F8" Margin="0,0,0,20"/>
                     <Label Content="Login name "/>
-                    <TextBox x:Name="tbxSalt"/>
+                    <TextBox x:Name="tbxLogin"/>
                     <Label Content="Jelszó"/>
                     <TextBox x:Name="tbxPassword"/>
                     <Button Content="Hash generálása →" Name="btnGeneralas" Click="btnGeneralas_Click" HorizontalAlignment="Stretch"/>
