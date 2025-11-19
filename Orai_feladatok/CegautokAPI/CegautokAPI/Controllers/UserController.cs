@@ -33,7 +33,7 @@ namespace CegautokAPI.Controllers
             }
         }
 
-        [HttpGet("UserById")]
+        [HttpGet("UserById/{id}")]
         public IActionResult UserById(int id) 
         {
             using(var context = new FlottaContext())
