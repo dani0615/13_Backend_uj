@@ -8,9 +8,9 @@ namespace CegautokAPI.Controllers
     public class UserController : ControllerBase
     {
         [HttpGet("Users")]
-        public IActionResult Users() 
+        public IActionResult Users()
         {
-            using(var context = new FlottaContext())
+            using (var context = new FlottaContext())
             {
                 try
                 {
@@ -34,9 +34,9 @@ namespace CegautokAPI.Controllers
         }
 
         [HttpGet("UserById/{id}")]
-        public IActionResult UserById(int id) 
+        public IActionResult UserById(int id)
         {
-            using(var context = new FlottaContext())
+            using (var context = new FlottaContext())
             {
                 try
                 {
@@ -45,7 +45,8 @@ namespace CegautokAPI.Controllers
                     {
                         return Ok(valasz);
                     }
-                    else {
+                    else
+                    {
                         User hiba = new User()
                         {
                             Id = -1,
@@ -53,7 +54,7 @@ namespace CegautokAPI.Controllers
                         };
                         return NotFound(hiba);
                     }
-                   
+
                 }
                 catch (Exception ex)
                 {
@@ -69,6 +70,100 @@ namespace CegautokAPI.Controllers
             }
 
         }
-       
+
+        [HttpPost("NewUser")]
+        public IActionResult NewUser(User user)
+        {
+            using (var context = new FlottaContext())
+            {
+                try
+                {
+                    context.Users.Add(user);
+                    context.SaveChanges();
+                    return Ok("Sikeres hozzáadás");
+
+                }
+                catch (Exception ex)
+                {
+                    User hiba2 = new User()
+                    {
+                        Id = -1,
+                        Name = $"Hiba a hozzáadás közben : {ex.Message}"
+                    };
+                    return BadRequest(hiba2);
+                    throw;
+                }
+
+            }
+
+        }
+
+        [HttpPut("ModifyUser")]
+        public IActionResult ModifyUser(User user)
+        {
+            using (var context = new FlottaContext())
+            {
+                try
+                {
+                    context.Users.Update(user);
+                    context.SaveChanges();
+                    return Ok("Sikeres módosítás");
+
+
+
+                }
+                catch (Exception ex)
+                {
+                    User hiba2 = new User()
+                    {
+                        Id = -1,
+                        Name = $"Hiba a módosítás közben : {ex.Message}"
+                    };
+                    return BadRequest(hiba2);
+                }
+            }
+
+        }
+
+        [HttpDelete("DelUser/{id}")]
+        public IActionResult DeleteUser(int id)
+        {
+            using (var context = new FlottaContext())
+            {
+                try
+                {
+                    User user = context.Users.FirstOrDefault(u => u.Id == id);
+                    if (user == null)
+                    {
+                        User hiba = new User()
+                        {
+                            Id = -1,
+                            Name = $"Nincs ilyen ID-jú felhasználó: {id}"
+                        };
+                        return NotFound(hiba);
+                    }
+                    else 
+                    {
+                        context.Users.Remove(user);
+                        context.SaveChanges();
+                        return Ok("Sikeres törlés");
+                       
+                    }
+                    }
+                catch (Exception ex)
+                {
+                    User hiba2 = new User()
+                    {
+                        Id = -1,
+                        Name = $"Hiba a törlés közben : {ex.Message}"
+                    };
+                    return BadRequest(hiba2);
+                }
+            }
+
+        }
+
+
     }
 }
+
