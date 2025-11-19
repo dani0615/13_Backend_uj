@@ -23,7 +23,7 @@ public partial class User
 
     public int Permission { get; set; }
 
-    public virtual ICollection<Kikuldottjarmu> Kikuldottjarmus { get; set; } = new List<Kikuldottjarmu>();
+    public virtual ICollection<Kikuldottjarmu>? Kikuldottjarmus { get; set; } = new List<Kikuldottjarmu>();
 
-    public virtual Privilege PermissionNavigation { get; set; } = null!;
+    public virtual Privilege? PermissionNavigation { get; set; } = null!;
 }
