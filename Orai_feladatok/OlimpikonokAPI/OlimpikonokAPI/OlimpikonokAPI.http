@@ -1,0 +1,6 @@
+@OlimpikonokAPI_HostAddress = http://localhost:5044
+
+GET {{OlimpikonokAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

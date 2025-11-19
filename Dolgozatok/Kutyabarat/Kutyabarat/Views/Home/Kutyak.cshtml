@@ -1,0 +1,36 @@
+﻿@{
+    ViewData["Title"] = "Kutyak";
+}
+@model IEnumerable<Kutyabarat.Models.Kutya>
+
+
+<div class="text-center">
+    <h1 class="display-4">Kutyák</h1>
+    <table class="table table-bordered table-striped table-responsive">
+        <thead>
+            <tr>
+                <th>Fajta Név</th>
+                <th>Marmagasság</th>
+                <th>Tömeg</th>
+                <th>Kép</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var kutya in Model)
+            {
+                <tr>
+                    <td>@kutya.Fajta</td>
+                    <td>@kutya.Marmagassag</td>
+                    <td>@kutya.Tomeg</td>
+                    <td>
+                            <img src="@Program.ImageConverter(kutya.Kep)"
+                                 style="max-width:auto; height: 50px;" />
+                        
+                    </td>
+                </tr>
+            }
+           
+
+        </tbody>
+        </table>
+</div>
