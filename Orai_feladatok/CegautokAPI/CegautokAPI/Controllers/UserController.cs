@@ -109,8 +109,6 @@ namespace CegautokAPI.Controllers
                     context.SaveChanges();
                     return Ok("Sikeres módosítás");
 
-
-
                 }
                 catch (Exception ex)
                 {
