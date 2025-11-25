@@ -71,6 +71,7 @@ namespace HashGenerator
             StreamWriter sw = new StreamWriter("hash.txt");
             sw.WriteLine(tbxLogin.Text);
             sw.WriteLine(tbxPassword.Text);
+            sw.WriteLine(tbxSalt.Text);
             sw.WriteLine(tbxHash.Text);
             sw.WriteLine(tbxDoubleHash.Text);
             sw.Close();
@@ -85,7 +86,7 @@ namespace HashGenerator
 
         private void Menu_About_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Hash Generator Pro v1.0\n\nKészítette: Dragon\nBiztonságos jelszóhash generátor SHA-256 algoritmussal.",
+            MessageBox.Show("Hash Generator Pro v1.0\n\nBiztonságos jelszóhash generátor SHA-256 algoritmussal.",
                             "Névjegy", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
