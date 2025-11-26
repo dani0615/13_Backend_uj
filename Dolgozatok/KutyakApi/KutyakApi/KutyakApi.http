@@ -1,0 +1,6 @@
+@KutyakApi_HostAddress = http://localhost:5016
+
+GET {{KutyakApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
