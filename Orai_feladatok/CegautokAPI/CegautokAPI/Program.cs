@@ -1,4 +1,6 @@
 
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json.Serialization;
 
 namespace CegautokAPI
@@ -36,5 +38,36 @@ namespace CegautokAPI
 
             app.Run();
         }
+        public static string CreateSHA256(string input)
+        {
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] data = sha256.ComputeHash(Encoding.UTF8.GetBytes(input));
+                StringBuilder sBuilder = new StringBuilder();
+                for (int i = 0; i < data.Length; i++)
+                {
+                    sBuilder.Append(data[i].ToString("x2"));
+                }
+                return sBuilder.ToString();
+
+            }
+
+        }
+
+        public static string GenerateSalt()
+        {
+            Random random = new Random();
+            string karakterek = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            string salt = "";
+            for (int i = 0; i < 64; i++)
+            {
+                int index = random.Next(karakterek.Length);
+                salt += karakterek[index];
+            }
+            return salt;
+
+        }
+
+
     }
 }

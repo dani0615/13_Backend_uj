@@ -1,5 +1,7 @@
+using CegautokAPI.DTOs;
 using CegautokAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CegautokAPI.Controllers
 {
@@ -32,6 +34,9 @@ namespace CegautokAPI.Controllers
 
             }
         }
+
+
+
 
         [HttpGet("UserById/{id}")]
         public IActionResult UserById(int id)
@@ -159,6 +164,38 @@ namespace CegautokAPI.Controllers
                 }
             }
 
+        }
+
+        [HttpGet("Jarmuvek/{id}")]
+        public IActionResult GetUserJarmuvek(int id) 
+        {
+            using (var context = new FlottaContext())
+            {
+                try
+                {
+                    List<SoforGepjarmuDTO> valasz = context.Kikuldottjarmus.Include(k => k.Kikuldetes)
+                        .Include(k => k.Gepjarmu)
+                        .Include(k => k.SoforNavigation)
+                        .Where(k => k.SoforNavigation.Id == id)
+                        .Select(k => new SoforGepjarmuDTO()
+                        {
+                            Id = id,
+                            Name = k.SoforNavigation.Name,
+                            Kezdes = k.Kikuldetes.Kezdes,
+                            Rendszam = k.Gepjarmu.Rendszam
+                        }).ToList();
+
+                    return Ok(valasz);
+
+                }
+                catch (Exception)
+                {
+
+
+                    throw;
+                }
+
+            }
         }
 
 

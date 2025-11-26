@@ -1,13 +1,52 @@
-﻿using CegautokAPI.Models;
+﻿using CegautokAPI.DTOs;
+using CegautokAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography.X509Certificates;
 
 namespace CegautokAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class KikuldetesController : ControllerBase
     {
+        [HttpGet("Jarmuvek")]
+
+        public IActionResult GetAll() 
+        {
+            using(var context = new FlottaContext()) 
+            {
+                try 
+                {
+                    List<KikuldJarmuDTO> valasz = context.Kikuldottjarmus
+                        .Include(x=> x.Kikuldetes)
+                        .Include(x=> x.Gepjarmu)
+                        .Select(x=> new KikuldJarmuDTO() 
+                        { Cim = x.Kikuldetes.Cim 
+                        , Datum = x.Kikuldetes.Kezdes,
+                        Rendszam= x.Gepjarmu.Rendszam}).ToList();
+                    return Ok (valasz);
+
+                }
+                catch (Exception ex) 
+                {
+                    List<KikuldJarmuDTO> valasz = new List<KikuldJarmuDTO>();
+                    KikuldJarmuDTO hiba = new KikuldJarmuDTO()
+                    {
+                        Cim = $"Hiba a kérés teljesítése közben:{ex.Message}"
+                    };
+                    valasz.Add(hiba);
+                    return BadRequest(valasz);
+                }
+
+            }
+
+
+        }
+
+
+
         [HttpGet("GetKikuldetesek")]
         public IActionResult GetKikuldetes()
         {
@@ -116,5 +155,40 @@ namespace CegautokAPI.Controllers
                 }
             }
         }
+
+        // adott Id-jú kiküldetésen kik vettek részt , listázni kell a nevét (sofőr)
+
+        [HttpGet("SoforByKikuldetes/{id}")]
+        public IActionResult SoforByKikuldetes(int id) 
+        {
+            using (var context = new FlottaContext()) 
+            {
+                try
+                {
+
+                    var SoforNeve = context.Kikuldottjarmus
+                    .Include(j => j.Kikuldetes)
+                    .Include(j => j.SoforNavigation)
+                    .FirstOrDefault(k => k.Id == id);
+                    if(SoforNeve != null) 
+                    {
+                        string sofor = SoforNeve.SoforNavigation.Name;
+                        return Ok(sofor);
+                    }
+                    
+                    else
+                        return NotFound(new { Message = "Nincs ilyen id" });
+                    
+
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest($"Hiba : {ex.Message}");
+                    throw;
+                }
+
+            }
+        }
+
     }
 }
