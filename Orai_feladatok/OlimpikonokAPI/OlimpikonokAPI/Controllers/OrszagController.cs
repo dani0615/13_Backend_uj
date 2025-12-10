@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using OlimpikonokAPI.Models;
 
 namespace OlimpikonokAPI.Controllers
@@ -10,14 +11,14 @@ namespace OlimpikonokAPI.Controllers
     {
         // CRUD
         [HttpGet("GetAll")]
-        public IActionResult GetALl() 
+        public async Task<IActionResult> GetALl() 
         {
             using (var context = new OlimpikonokContext())
             {
 
                 try
                 {
-                    List<Orszag> orszagok = context.Orszags.ToList();
+                    List<Orszag> orszagok = await context.Orszags.ToListAsync();
                     return Ok(orszagok);
                 }
                 catch (Exception ex)
@@ -63,6 +64,28 @@ namespace OlimpikonokAPI.Controllers
                 }
             }
         }
+
+        [HttpPut("ModositOrszag")]
+
+        public async Task<IActionResult> PutOrszag(Orszag orszag) 
+        {
+            using (var context = new OlimpikonokContext())
+            {
+                try
+                {
+                    context.Orszags.Update(orszag);
+                    await context.SaveChangesAsync();
+                    return Ok(orszag);
+                }
+                catch (Exception ex)
+                {
+                    Orszag hiba = new Orszag() { Id = -1, Nev = $"Hiba az ország módosítása során: {ex.Message}" };
+                    return BadRequest(hiba);
+                }
+            }
+
+        }
+
 
 
 
