@@ -1,5 +1,6 @@
 ﻿using CegautokAPI.DTOs;
 using CegautokAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ namespace CegautokAPI.Controllers
     [ApiController]
     public class GepjarmuController : ControllerBase
     {
+        [Authorize]
         [HttpGet("GetAll")]
         public IActionResult GetAll()
         {

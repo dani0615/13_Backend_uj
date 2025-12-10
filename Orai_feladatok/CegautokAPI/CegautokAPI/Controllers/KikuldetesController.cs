@@ -54,7 +54,7 @@ namespace CegautokAPI.Controllers
             {
                 try
                 {
-                    var kikuldetesek = context.Kikuldtes.ToList();
+                    var kikuldetesek = context.Kikuldetes.ToList();
                     return Ok(kikuldetesek);
                 }
                 catch (Exception ex)
@@ -65,96 +65,107 @@ namespace CegautokAPI.Controllers
             }
         }
 
-        [HttpGet("GetKikuldetesById/{id}")]
-        public IActionResult GetKikuldetesById(int id)
+        [HttpGet("KikuldteById/{Id}")]
+        public IActionResult GetKikuldteById(int Id)
         {
-            using (var context = new FlottaContext())
+            using (var context = new CegautokAPI.Models.FlottaContext())
             {
                 try
                 {
-                    var kikuldetes = context.Kikuldtes.FirstOrDefault(k => k.Id == id);
-                    if (kikuldetes != null)
+                    var kikuldte = context.Kikuldetes.FirstOrDefault(u => u.Id == Id);
+                    if (kikuldte is Kikuldte)
                     {
-                        return Ok(kikuldetes);
+                        return Ok(kikuldte);
                     }
                     else
                     {
-                        return NotFound(new { Error = $"Nincs ilyen ID-jú kiküldetés: {id}" });
+                        return BadRequest("Nincs ilyen id!");
+
                     }
+
                 }
                 catch (Exception ex)
                 {
-                    return BadRequest(new { Error = $"Hiba a lekérdezés közben: {ex.Message}" });
+                    return BadRequest(new Kikuldte()
+                    {
+                        Id = -1,
+                        Celja = $"Hiba történt: {ex.Message}",
+                        Cim = "Hiba",
+                        Kezdes = DateTime.Now,
+                        Befejezes = DateTime.Now
+                    });
                 }
             }
-
         }
 
-        [HttpPost("NewKikuldetes")]
-        public IActionResult NewKikuldetes(Kikuldte kikuldetes)
+        [HttpPost("NewKikuldte")]
+        public IActionResult AddNewKikuldte(Kikuldte kikuldte)
         {
-            using (var context = new FlottaContext())
+            using (var context = new CegautokAPI.Models.FlottaContext())
             {
                 try
                 {
-                    context.Kikuldtes.Add(kikuldetes);
+
+                    context.Add(kikuldte);
                     context.SaveChanges();
-                    return Ok(new { Message = "Kiküldetés sikeresen hozzáadva." });
+                    return Ok("Sikeres rögzítés");
+
                 }
                 catch (Exception ex)
                 {
-                    return BadRequest(new { Error = $"Hiba a hozzáadás közben: {ex.Message}" });
+                    return BadRequest($"Hiba történt a felvétel során: {ex.Message}");
                 }
             }
         }
 
-        [HttpPut("UpdateKikuldetes")]
-        public IActionResult UpdateKikuldetes(Kikuldte kuldetes)
-        {
-            using (var context = new FlottaContext())
-            {
-                try
-                {
-                    context.Kikuldtes.Update(kuldetes);
-                    context.SaveChanges();
-                    return Ok(new { Message = "Kiküldetés sikeresen frissítve." });
+
+        //[HttpPut("UpdateKikuldetes")]
+        //public IActionResult UpdateKikuldetes(Kikuldte kuldetes)
+        //{
+        //    using (var context = new FlottaContext())
+        //    {
+        //        try
+        //        {
+        //            context.Kikuldtes.Update(kuldetes);
+        //            context.SaveChanges();
+        //            return Ok(new { Message = "Kiküldetés sikeresen frissítve." });
 
 
-                }
-                catch (Exception)
-                {
-                    return BadRequest(new { Error = "Hiba a frissítés közben." });
+        //        }
+        //        catch (Exception)
+        //        {
+        //            return BadRequest(new { Error = "Hiba a frissítés közben." });
 
-                }
-            }
+        //        }
+        //    }
 
-        }
+        //}
 
-        [HttpDelete("DeleteKikuldetes/{id}")]
-        public IActionResult DeleteKikuldetes(int id)
-        {
-            using (var context = new FlottaContext())
-            {
-                try
-                {
-                    var kuldetes = context.Kikuldtes.FirstOrDefault(k => k.Id == id);
-                    if (kuldetes != null)
-                    {
-                        context.Kikuldtes.Remove(kuldetes);
-                        context.SaveChanges();
-                        return Ok(new { Message = "Kiküldetés sikeresen törölve." });
-                    }
-                    else
-                    {
-                        return NotFound(new { Error = $"Nincs ilyen ID-jú kiküldetés: {id}" });
-                    }
-                }
-                catch (Exception)
-                {
-                    return BadRequest(new { Error = "Hiba a törlés közben." });
-                }
-            }
-        }
+        //[HttpDelete("DeleteKikuldetes/{id}")]
+        //public IActionResult DeleteKikuldetes(int id)
+        //{
+        //    using (var context = new FlottaContext())
+        //    {
+        //        try
+        //        {
+        //            var kuldetes = context.Kikuldtes.FirstOrDefault(k => k.Id == id);
+        //            if (kuldetes != null)
+        //            {
+        //                context.Kikuldtes.Remove(kuldetes);
+        //                context.SaveChanges();
+        //                return Ok(new { Message = "Kiküldetés sikeresen törölve." });
+        //            }
+        //            else
+        //            {
+        //                return NotFound(new { Error = $"Nincs ilyen ID-jú kiküldetés: {id}" });
+        //            }
+        //        }
+        //        catch (Exception)
+        //        {
+        //            return BadRequest(new { Error = "Hiba a törlés közben." });
+        //        }
+        //    }
+        //}
 
         // adott Id-jú kiküldetésen kik vettek részt , listázni kell a nevét (sofőr)
 
