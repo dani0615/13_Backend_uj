@@ -56,7 +56,18 @@ namespace LoginClient
                 {
                     MessageBox.Show(SaltResponse.Result);
                     string hashed = CreateSHA256(pbxLogin.Password + SaltResponse.Result);
-                    var loginResponse  = client.PostAsync("Login/Login" , new )
+                    var loginResponse = client.PostAsync("Login/Login", new StringContent($"{{\"LoginName\":\"{tbxLoginNev.Text}\", \"Hash\":\"{hashed}\"", Encoding.UTF8 , "application/json"));
+                    if (loginResponse.Result.IsSuccessStatusCode)
+                    {
+                        string token = loginResponse.Result.Content.ReadAsStringAsync().Result;
+                        MessageBox.Show(token);
+                        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+                    }
+                    else 
+                    {
+                        MessageBox.Show("Sikertelen bejelentkezés");
+                    }
+                   
                 }
                 else
                 {
