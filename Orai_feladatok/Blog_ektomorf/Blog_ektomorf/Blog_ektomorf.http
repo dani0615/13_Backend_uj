@@ -1,0 +1,6 @@
+@Blog_ektomorf_HostAddress = http://localhost:5290
+
+GET {{Blog_ektomorf_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
