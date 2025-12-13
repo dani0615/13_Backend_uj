@@ -1,0 +1,25 @@
+﻿<Window x:Class="LoginClient.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LoginClient"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel>
+            <Label Content="Login név: " />
+            <TextBox x:Name="tbxLoginNev" Text="Probaodon"/>
+            <Label Content="Jelszó"/>
+            <PasswordBox x:Name="pbxLogin" Password="p"/>
+            <Button Name="btnLogin" Content="Login" Click="btnLogin_Click"/>
+            <Button x:Name="btnSelect" Content="Felhasználók" Click="btnSelect_Click"/>
+        </StackPanel>
+        <DataGrid x:Name="dgrUsers" Grid.Column="1"/>
+    </Grid>
+</Window>
