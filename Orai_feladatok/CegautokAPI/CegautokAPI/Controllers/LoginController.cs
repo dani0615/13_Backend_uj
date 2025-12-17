@@ -14,21 +14,23 @@ namespace CegautokAPI.Controllers
     public class LoginController : ControllerBase
     {
         private readonly Jwtsettings _jwtSettings;
+        private readonly FlottaContext _context;
 
-        public LoginController(Jwtsettings jwtSettings)
+        public LoginController(Jwtsettings jwtSettings , FlottaContext context)
         {
             _jwtSettings = jwtSettings;
+            _context = context;
         }
 
         // végpont: getsalt – paraméterként felhasználónév (String), visszadja a tárolt salt-ot, ha nincs akkor NotFound
         [HttpGet("GetSalt")]
         public IActionResult GetSalt(string loginName)
         {
-            using (var context = new FlottaContext())
+            
             {
                 try
                 {
-                    User user = context.Users.FirstOrDefault(u => u.LoginName == loginName);
+                    User user = _context.Users.FirstOrDefault(u => u.LoginName == loginName);
                     if (user == null)
                     {
                         return NotFound("Nincs ilyen felhasználó.");
@@ -46,12 +48,12 @@ namespace CegautokAPI.Controllers
         [HttpPost("Login")]
         public IActionResult Login(LoginDTO loginDTO)
         {
-            using (var context = new FlottaContext())
+            
             {
                 try
                 {
                     
-                    User user = context.Users.FirstOrDefault(u => u.LoginName == loginDTO.LoginName && u.Active);
+                    User user = _context.Users.FirstOrDefault(u => u.LoginName == loginDTO.LoginName && u.Active);
 
                     if (user == null)
                     {

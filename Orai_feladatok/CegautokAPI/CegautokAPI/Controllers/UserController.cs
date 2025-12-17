@@ -3,6 +3,8 @@ using CegautokAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
+using Mysqlx;
 
 namespace CegautokAPI.Controllers
 {
@@ -11,15 +13,21 @@ namespace CegautokAPI.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
-      
+        private readonly FlottaContext _context;
+
+        public UserController(FlottaContext context)
+        {
+            _context = context;
+        }
+
         [HttpGet("Users")]
         public IActionResult Users()
         {
-            using (var context = new FlottaContext())
+            
             {
                 try
                 {
-                    List<User> userek = context.Users.ToList();
+                    List<User> userek = _context.Users.ToList();
                     return Ok(userek);
                 }
                 catch (Exception ex)
@@ -44,11 +52,11 @@ namespace CegautokAPI.Controllers
         [HttpGet("UserById/{id}")]
         public IActionResult UserById(int id)
         {
-            using (var context = new FlottaContext())
+            
             {
                 try
                 {
-                    User valasz = context.Users.FirstOrDefault(u => u.Id == id);
+                    User valasz = _context.Users.FirstOrDefault(u => u.Id == id);
                     if (valasz != null)
                     {
                         return Ok(valasz);
@@ -82,12 +90,12 @@ namespace CegautokAPI.Controllers
         [HttpPost("NewUser")]
         public IActionResult NewUser(User user)
         {
-            using (var context = new FlottaContext())
+            
             {
                 try
                 {
-                    context.Users.Add(user);
-                    context.SaveChanges();
+                    _context.Users.Add(user);
+                    _context.SaveChanges();
                     return Ok("Sikeres hozzáadás");
 
                 }
@@ -109,12 +117,12 @@ namespace CegautokAPI.Controllers
         [HttpPut("ModifyUser")]
         public IActionResult ModifyUser(User user)
         {
-            using (var context = new FlottaContext())
+            
             {
                 try
                 {
-                    context.Users.Update(user);
-                    context.SaveChanges();
+                    _context.Users.Update(user);
+                    _context.SaveChanges();
                     return Ok("Sikeres módosítás");
 
                 }
@@ -134,11 +142,11 @@ namespace CegautokAPI.Controllers
         [HttpDelete("DelUser/{id}")]
         public IActionResult DeleteUser(int id)
         {
-            using (var context = new FlottaContext())
+           
             {
                 try
                 {
-                    User user = context.Users.FirstOrDefault(u => u.Id == id);
+                    User user = _context.Users.FirstOrDefault(u => u.Id == id);
                     if (user == null)
                     {
                         User hiba = new User()
@@ -150,8 +158,8 @@ namespace CegautokAPI.Controllers
                     }
                     else 
                     {
-                        context.Users.Remove(user);
-                        context.SaveChanges();
+                        _context.Users.Remove(user);
+                        _context.SaveChanges();
                         return Ok("Sikeres törlés");
                        
                     }
@@ -172,11 +180,11 @@ namespace CegautokAPI.Controllers
         [HttpGet("Jarmuvek/{id}")]
         public IActionResult GetUserJarmuvek(int id) 
         {
-            using (var context = new FlottaContext())
+            
             {
                 try
                 {
-                    List<SoforGepjarmuDTO> valasz = context.Kikuldottjarmus.Include(k => k.Kikuldetes)
+                    List<SoforGepjarmuDTO> valasz = _context.Kikuldottjarmus.Include(k => k.Kikuldetes)
                         .Include(k => k.Gepjarmu)
                         .Include(k => k.SoforNavigation)
                         .Where(k => k.SoforNavigation.Id == id)
@@ -191,9 +199,9 @@ namespace CegautokAPI.Controllers
                     return Ok(valasz);
 
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-
+                    
 
                     throw;
                 }

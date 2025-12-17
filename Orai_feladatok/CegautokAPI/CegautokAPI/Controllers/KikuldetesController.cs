@@ -11,15 +11,21 @@ namespace CegautokAPI.Controllers
     [ApiController]
     public class KikuldetesController : ControllerBase
     {
+        private readonly FlottaContext _context;
+        public KikuldetesController(FlottaContext context)
+        {
+            _context = context;
+        }
+
         [HttpGet("Jarmuvek")]
 
         public IActionResult GetAll() 
         {
-            using(var context = new FlottaContext()) 
+            
             {
                 try 
                 {
-                    List<KikuldJarmuDTO> valasz = context.Kikuldottjarmus
+                    List<KikuldJarmuDTO> valasz = _context.Kikuldottjarmus
                         .Include(x=> x.Kikuldetes)
                         .Include(x=> x.Gepjarmu)
                         .Select(x=> new KikuldJarmuDTO() 
@@ -50,11 +56,11 @@ namespace CegautokAPI.Controllers
         [HttpGet("GetKikuldetesek")]
         public IActionResult GetKikuldetes()
         {
-            using (var context = new FlottaContext())
+            
             {
                 try
                 {
-                    var kikuldetesek = context.Kikuldetes.ToList();
+                    var kikuldetesek = _context.Kikuldetes.ToList();
                     return Ok(kikuldetesek);
                 }
                 catch (Exception ex)
@@ -68,11 +74,11 @@ namespace CegautokAPI.Controllers
         [HttpGet("KikuldteById/{Id}")]
         public IActionResult GetKikuldteById(int Id)
         {
-            using (var context = new CegautokAPI.Models.FlottaContext())
+            
             {
                 try
                 {
-                    var kikuldte = context.Kikuldetes.FirstOrDefault(u => u.Id == Id);
+                    var kikuldte = _context.Kikuldetes.FirstOrDefault(u => u.Id == Id);
                     if (kikuldte is Kikuldte)
                     {
                         return Ok(kikuldte);
@@ -101,13 +107,13 @@ namespace CegautokAPI.Controllers
         [HttpPost("NewKikuldte")]
         public IActionResult AddNewKikuldte(Kikuldte kikuldte)
         {
-            using (var context = new CegautokAPI.Models.FlottaContext())
+            
             {
                 try
                 {
 
-                    context.Add(kikuldte);
-                    context.SaveChanges();
+                    _context.Add(kikuldte);
+                    _context.SaveChanges();
                     return Ok("Sikeres rögzítés");
 
                 }
@@ -172,12 +178,12 @@ namespace CegautokAPI.Controllers
         [HttpGet("SoforByKikuldetes/{id}")]
         public IActionResult SoforByKikuldetes(int id) 
         {
-            using (var context = new FlottaContext()) 
+            
             {
                 try
                 {
 
-                    var SoforNeve = context.Kikuldottjarmus
+                    var SoforNeve = _context.Kikuldottjarmus
                     .Include(j => j.Kikuldetes)
                     .Include(j => j.SoforNavigation)
                     .FirstOrDefault(k => k.Id == id);

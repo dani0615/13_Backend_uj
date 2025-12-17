@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using CegautokAPI.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -18,6 +19,11 @@ namespace CegautokAPI
             // Add services to the container.
 
             builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
+            builder.Services.AddDbContext<FlottaContext>(options =>
+            {
+                options.UseMySQL(builder.Configuration.GetConnectionString("FlottaConnection"));
+            });
 
 
             //JWt settings

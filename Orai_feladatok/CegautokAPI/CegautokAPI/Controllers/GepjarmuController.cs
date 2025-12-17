@@ -11,15 +11,23 @@ namespace CegautokAPI.Controllers
     [ApiController]
     public class GepjarmuController : ControllerBase
     {
+        private readonly FlottaContext _context;
+
+        public GepjarmuController(FlottaContext context)
+        {
+            _context = context;
+        }
+
+
         [Authorize]
         [HttpGet("GetAll")]
         public IActionResult GetAll()
         {
-            using (var context = new FlottaContext())
+            
             {
                 try
                 {
-                    var gepjarmuvek = context.Gepjarmus.ToList();
+                    var gepjarmuvek = _context.Gepjarmus.ToList();
                     return Ok(gepjarmuvek);
                 }
                 catch (Exception ex)
@@ -32,10 +40,10 @@ namespace CegautokAPI.Controllers
         [HttpGet("{id}/Hasznalat")]
         public IActionResult GethasznalatById(int id)
         {
-            using (var context = new FlottaContext())
+            
                 try
                 {
-                    List<JarmuHasznalatDTO> valasz = context.Kikuldottjarmus.Include(k => k.Kikuldetes)
+                    List<JarmuHasznalatDTO> valasz = _context.Kikuldottjarmus.Include(k => k.Kikuldetes)
                         .Include(k => k.Gepjarmu)
                         .Where(j => j.GepjarmuId == id).Select(j => new JarmuHasznalatDTO()
                         {
@@ -62,12 +70,11 @@ namespace CegautokAPI.Controllers
 
         [HttpGet("Sofor")]
         public IActionResult GetSofor() 
-        {
-            using (var context = new FlottaContext()) 
+        { using (var context = new FlottaContext()) 
             {
                 try
                 {
-                    List<SoforDTO> valasz = context.Kikuldottjarmus
+                    List<SoforDTO> valasz = _context.Kikuldottjarmus
                         .Include(j => j.Gepjarmu)
                         .Include(j => j.SoforNavigation)
                         .GroupBy(j => new { rsz = j.Gepjarmu.Rendszam, so = j.SoforNavigation.Name })
@@ -97,11 +104,11 @@ namespace CegautokAPI.Controllers
         [HttpGet("GetById/{id}")]
         public IActionResult GetbyId(int id)
         {
-            using (var context = new FlottaContext())
+           
             {
                 try
                 {
-                    var gepjarmu = context.Gepjarmus.FirstOrDefault(g => g.Id == id);
+                    var gepjarmu = _context.Gepjarmus.FirstOrDefault(g => g.Id == id);
                     if (gepjarmu != null)
                     {
                         return Ok(gepjarmu);
@@ -122,12 +129,12 @@ namespace CegautokAPI.Controllers
         [HttpPost("NewJarmu")]
         public IActionResult NewJarmu(Gepjarmu jarmu)
         {
-            using (var context = new FlottaContext())
+            
             {
                 try
                 {
-                    context.Gepjarmus.Add(jarmu);
-                    context.SaveChanges();
+                    _context.Gepjarmus.Add(jarmu);
+                    _context.SaveChanges();
                     return Ok(new { Message = "Gépjármű sikeresen hozzáadva." });
                 }
                 catch (Exception ex)
@@ -143,12 +150,12 @@ namespace CegautokAPI.Controllers
         [HttpPut("UpdateJarmu")]
         public IActionResult UpdateJarmu(Gepjarmu jarmu) 
         {
-            using (var context = new FlottaContext())
+           
             {
                 try
                 {
-                    context.Gepjarmus.Update(jarmu);
-                    context.SaveChanges();
+                    _context.Gepjarmus.Update(jarmu);
+                    _context.SaveChanges();
                     return Ok(new { Message = "Gépjármű sikeresen frissítve." });
                 }
                 catch (Exception ex)
@@ -161,15 +168,15 @@ namespace CegautokAPI.Controllers
         [HttpDelete("DeleteJarmu/{id}")]
         public IActionResult DeleteJarmu(int id) 
         {
-            using (var context = new FlottaContext())
+            
             {
                 try
                 {
-                    var jarmu = context.Gepjarmus.FirstOrDefault(g => g.Id == id);
+                    var jarmu = _context.Gepjarmus.FirstOrDefault(g => g.Id == id);
                     if (jarmu != null)
                     {
-                        context.Gepjarmus.Remove(jarmu);
-                        context.SaveChanges();
+                        _context.Gepjarmus.Remove(jarmu);
+                        _context.SaveChanges();
                         return Ok(new { Message = "Gépjármű sikeresen törölve." });
                     }
                     else
