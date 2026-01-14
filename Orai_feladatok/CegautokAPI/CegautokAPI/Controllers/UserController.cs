@@ -19,7 +19,7 @@ namespace CegautokAPI.Controllers
         {
             _context = context;
         }
-
+        [Authorize(Roles ="10")]
         [HttpGet("Users")]
         public IActionResult Users()
         {
@@ -101,12 +101,8 @@ namespace CegautokAPI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    User hiba2 = new User()
-                    {
-                        Id = -1,
-                        Name = $"Hiba a hozzáadás közben : {ex.Message}"
-                    };
-                    return BadRequest(hiba2);
+                   
+                    return BadRequest($"Hiba a rögzítés közben : {ex.Message}");
                     throw;
                 }
 
@@ -201,8 +197,8 @@ namespace CegautokAPI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    
 
+                    return StatusCode(500, $"Hiba a lekérdezés közben: {ex.Message}");
                     throw;
                 }
 

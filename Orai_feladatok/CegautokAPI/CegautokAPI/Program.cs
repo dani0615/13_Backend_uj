@@ -1,4 +1,5 @@
 
+using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -12,6 +13,28 @@ namespace CegautokAPI
 {
     public class Program
     {
+        private static MailSettings mailSettings = new MailSettings();
+        public static async Task SendEmail(string mailAddressTo, string subject, string body)
+        {
+            MailMessage mail = new MailMessage();
+            SmtpClient SmtpServer = new SmtpClient(mailSettings.SmtpServer);
+            mail.From = new MailAddress(mailSettings.SenderEmail);
+            mail.To.Add(mailAddressTo);
+            mail.Subject = subject;
+            mail.Body = body;
+
+            /*System.Net.Mail.Attachment attachment;
+            attachment = new System.Net.Mail.Attachment("");
+            mail.Attachments.Add(attachment);*/
+
+            SmtpServer.Port = mailSettings.Port;
+            SmtpServer.Credentials = new System.Net.NetworkCredential(mailSettings.SenderEmail, mailSettings.SenderPassword);
+
+            SmtpServer.EnableSsl = true;
+
+            await SmtpServer.SendMailAsync(mail);
+
+        }
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +47,10 @@ namespace CegautokAPI
             {
                 options.UseMySQL(builder.Configuration.GetConnectionString("FlottaConnection"));
             });
+            //Mail settings
+            
+            builder.Configuration.GetSection("MailServices").Bind(mailSettings);
+            builder.Services.AddSingleton(mailSettings);
 
 
             //JWt settings
@@ -52,6 +79,9 @@ namespace CegautokAPI
 
                 };
             });
+
+            
+
 
             builder.Services.AddCors(c => { c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()); });
 

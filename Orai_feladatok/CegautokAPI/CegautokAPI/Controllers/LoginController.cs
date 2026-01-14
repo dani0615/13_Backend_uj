@@ -5,6 +5,7 @@ using CegautokAPI.DTOs;
 using CegautokAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace CegautokAPI.Controllers
@@ -44,7 +45,7 @@ namespace CegautokAPI.Controllers
                 }
             }
         }
-
+       
         [HttpPost("Login")]
         public IActionResult Login(LoginDTO loginDTO)
         {
@@ -52,9 +53,7 @@ namespace CegautokAPI.Controllers
             {
                 try
                 {
-                    
-                    User user = _context.Users.FirstOrDefault(u => u.LoginName == loginDTO.LoginName && u.Active);
-
+                    User user = _context.Users.Include(u=> u.PermissionNavigation).FirstOrDefault(u => u.LoginName == loginDTO.LoginName && u.Active);
                     if (user == null)
                     {
                         return NotFound("Nincs megfelelő felhasználó. A belépés sikertelen.");
@@ -73,6 +72,7 @@ namespace CegautokAPI.Controllers
                    
                     var claims = new[]
                     {
+                        new Claim(ClaimTypes.Role , user.PermissionNavigation.Level.ToString()),
                         new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),      
                         new Claim(JwtRegisteredClaimNames.UniqueName, user.LoginName),
                         new Claim(JwtRegisteredClaimNames.GivenName, user.Name),
