@@ -1,10 +1,13 @@
 
+using System.Net;
 using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json.Serialization;
 using CegautokAPI.Models;
+using FluentFTP;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -14,6 +17,29 @@ namespace CegautokAPI
     public class Program
     {
         private static MailSettings mailSettings = new MailSettings();
+
+        private static FtpSettings ftpSettings = new FtpSettings();
+        public static async Task<string> UploadToFtpServer(Stream filestream , string fileName) 
+        {
+            try
+            {
+                NetworkCredential credential = new NetworkCredential(ftpSettings.FtpUser, ftpSettings.FtpPassword);
+                await using (AsyncFtpClient client = new AsyncFtpClient(ftpSettings.Host, credential))
+                {
+                    client.Config.DataConnectionType = FtpDataConnectionType.AutoActive;
+                    await client.Connect();
+                   
+                    await client.UploadStream(filestream, ftpSettings.SubFolder + fileName);
+                    await client.Disconnect();
+                    return "Feltöltés sikeres";
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+               
+            }
+        }
         public static async Task SendEmail(string mailAddressTo, string subject, string body)
         {
             MailMessage mail = new MailMessage();
@@ -52,6 +78,9 @@ namespace CegautokAPI
             builder.Configuration.GetSection("MailServices").Bind(mailSettings);
             builder.Services.AddSingleton(mailSettings);
 
+            //FTP
+            builder.Configuration.GetSection("FtpSettings").Bind(ftpSettings);
+            builder.Services.AddSingleton(ftpSettings);
 
             //JWt settings
             var jwtSettings = new Jwtsettings();
