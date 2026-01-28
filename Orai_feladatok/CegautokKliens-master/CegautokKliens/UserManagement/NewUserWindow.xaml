@@ -1,0 +1,44 @@
+﻿<Window x:Class="CegautokKliens.UserManagement.NewUserWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CegautokKliens.UserManagement"
+        mc:Ignorable="d"
+        Title="NewUserWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="9*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <StackPanel>
+            <Label Content="User Name"/>
+            <TextBox x:Name="tbxName" />
+            <Label Content="Login Name"/>
+            <TextBox x:Name="tbxLoginName" />
+            <CheckBox Content="Active" IsChecked="True" Name="chbActive" />
+            <Label Content="Address:"/>
+            <TextBox x:Name="tbxAdress"/>
+            <Label Content="Email:"/>
+            <TextBlock x:Name="tbxEmail"/>
+            <Label Content="Password"/>
+            <PasswordBox x:Name="pbxPassword"/>
+            <Label Content="Confirm Password"/>
+            <PasswordBox x:Name="tbxConfirmPassword"/>
+            <Label Content="Phone Number"/>
+            <TextBox x:Name="tbxPhone"/>
+            <Label Content="Image file name:"/>
+            <TextBox x:Name="tbxImage"
+                     Text="missing.jpg"/>
+            <ComboBox Name="cbxPermission" />
+
+        </StackPanel>
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    Grid.Row="1">
+            <Button x:Name="tbxSave" Content="Save" Click="tbxSave_Click"/>
+            <Button x:Name="btnExit" Content="Exit" Click="btnExit_Click"/>
+        </StackPanel>
+
+    </Grid>
+</Window>

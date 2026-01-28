@@ -22,7 +22,7 @@ namespace CegautokAPI.Controllers
 
 
         }
-
+        [HttpGet]
         [Route("Backup/{fileName}")]
         //[Authorize("admin")]
 

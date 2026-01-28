@@ -19,7 +19,7 @@ namespace CegautokAPI.Controllers
         {
             _context = context;
         }
-        [Authorize(Roles ="10")]
+        //[Authorize(Roles ="10")]
         [HttpGet("Users")]
         public IActionResult Users()
         {
