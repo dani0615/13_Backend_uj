@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -34,30 +35,45 @@ namespace CegautokKliens.UserManagement
             cbxPermission.SelectedIndex = 0;
         }
 
-        private void tbxSave_Click(object sender, RoutedEventArgs e)
+        private async void btnSave_Click(object sender, RoutedEventArgs e)
         {
+            if (pbxPassword.Password != pbxConfirmPassword.Password)
+            {
+                MessageBox.Show("A jelszavak nem egyeznek!");
+                return;
+            }
+
             string salt = new LoginServices().GenerateSalt();
             string simpleHash = new LoginServices().CreateSHA256(pbxPassword.Password + salt);
             User newUser = new User()
             {
                 Name = tbxName.Text,
                 LoginName = tbxLoginName.Text,
-                Address = tbxAdress.Text,
+                Address = tbxAddress.Text,
                 Email = tbxEmail.Text,
                 Salt = salt,
                 Hash = new LoginServices().CreateSHA256(simpleHash),
                 Phone = tbxPhone.Text,
                 Permission = (int)cbxPermission.SelectedValue,
-                Active = chbActive.IsChecked ?? false
-
+                Active = chbActive.IsChecked ?? false,
+                Image = tbxImage.Text
             };
-            string toSend = JsonSerializer.Serialize(newUser, JsonSerializerOptions.Default);
-            var content = new StringContent(toSend, Encoding.UTF8, "application/json");
+
+            var response = await _client.PostAsJsonAsync("User/User", newUser);
+            if (response.IsSuccessStatusCode)
+            {
+                MessageBox.Show("Sikeres mentés!");
+                Close();
+            }
+            else
+            {
+                MessageBox.Show("Hiba a mentés során: " + response.ReasonPhrase);
+            }
         }
 
         private void btnExit_Click(object sender, RoutedEventArgs e)
         {
-
+            Close();
         }
     }
 }

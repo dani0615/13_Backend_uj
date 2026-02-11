@@ -33,18 +33,53 @@ namespace CegautokKliens.UserManagement
 
         private async void btnLoad_Click(object sender, RoutedEventArgs e)
         {
-            string url = $"{_client.BaseAddress}User/Users";
-            var response = await _client.GetFromJsonAsync<List<User>>(url);
-            if (response != null) {
-                users = response;
-                dgrUsers.ItemsSource = users;
+            try
+            {
+                var response = await _client.GetFromJsonAsync<List<User>>("User/Users");
+                if (response != null)
+                {
+                    users = response;
+                    dgrUsers.ItemsSource = null;
+                    dgrUsers.ItemsSource = users;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Hiba a betöltés során: " + ex.Message);
+            }
+        }
+
+        private void btnUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            if (dgrUsers.SelectedItem is User selectedUser)
+            {
+                UpdateUserWindow uw = new UpdateUserWindow(_client, selectedUser);
+                uw.ShowDialog();
+                btnLoad_Click(sender, e);
+            }
+            else
+            {
+                MessageBox.Show("Kérem válasszon ki egy felhasználót!");
+            }
+        }
+
+        private void btnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            if (dgrUsers.SelectedItem is User selectedUser)
+            {
+                DeleteUserWindow dw = new DeleteUserWindow(_client, selectedUser);
+                dw.ShowDialog();
+                btnLoad_Click(sender, e);
+            }
+            else
+            {
+                MessageBox.Show("Kérem válasszon ki egy felhasználót!");
             }
         }
 
         private void btnExit_Click(object sender, RoutedEventArgs e)
         {
             Close();
-
         }
     }
 }

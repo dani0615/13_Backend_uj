@@ -14,10 +14,11 @@
 
         <StackPanel Orientation="Horizontal" >
             <Button x:Name="btnLoad" Content="Load Users" Click="btnLoad_Click" Margin="10" Padding="5" />
+            <Button x:Name="btnUpdate" Content="Update Selected" Click="btnUpdate_Click" Margin="10" Padding="5" />
+            <Button x:Name="btnDelete" Content="Delete Selected" Click="btnDelete_Click" Margin="10" Padding="5" />
             <Button x:Name="btnExit" Content="Exit" Click="btnExit_Click" Margin="10" Padding="5" />
-
         </StackPanel>
-        <DataGrid x:Name="dgrUsers" Grid.Row="1" />
+        <DataGrid x:Name="dgrUsers" Grid.Row="1" IsReadOnly="True" AutoGenerateColumns="True" Margin="10" SelectionMode="Single" />
 
     </Grid>
 </Window>

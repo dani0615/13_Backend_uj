@@ -20,8 +20,8 @@ namespace CegautokKliens
     {
         static HttpClient client = new HttpClient()
         {
-            //BaseAddress = new("http://localhost:5000/")
-            BaseAddress = new("https://localhost:7238/")
+            // A backend a launchSettings.json szerint a 7030-as (https) vagy 5222-es (http) porton figyel.
+            BaseAddress = new("https://localhost:7030/")
         };
 
         public static string token = null;
@@ -36,12 +36,12 @@ namespace CegautokKliens
             {
                 LoginWindow loginWindow = new LoginWindow(client);
                 loginWindow.ShowDialog();
-                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
                 if (token != null)
                 {
+                    client.DefaultRequestHeaders.Remove("Authorization");
+                    client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
                     itemLogin.Header = "Logout";
                     MessageBox.Show("Sikeres bejelentkezés!");
-                    
                 }
                 else
                 {
@@ -51,6 +51,7 @@ namespace CegautokKliens
             else
             {
                 token = null;
+                client.DefaultRequestHeaders.Remove("Authorization");
                 MessageBox.Show("Kijelentkezett a szerverről!");
                 itemLogin.Header = "Login";
             }
@@ -70,12 +71,14 @@ namespace CegautokKliens
 
         private void itemUpdateUSer_Click(object sender, RoutedEventArgs e)
         {
-
+            MessageBox.Show("Válasszon ki egy felhasználót a listából a módosításhoz!");
+            itemUserList_Click(sender, e);
         }
 
         private void itemDeleteUser_Click(object sender, RoutedEventArgs e)
         {
-
+            MessageBox.Show("Válasszon ki egy felhasználót a listából a törléshez!");
+            itemUserList_Click(sender, e);
         }
     }
 }
