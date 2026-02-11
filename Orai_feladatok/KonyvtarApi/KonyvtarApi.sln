@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34928.147
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KonyvtarApi", "KonyvtarApi\KonyvtarApi.csproj", "{65B7F3A3-F67B-4955-B584-3CA7F062B6B9}"
+EndProject
+Global
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2A97DA90-72BD-40A5-B9B5-6E8475D68D30}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{65B7F3A3-F67B-4955-B584-3CA7F062B6B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65B7F3A3-F67B-4955-B584-3CA7F062B6B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65B7F3A3-F67B-4955-B584-3CA7F062B6B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65B7F3A3-F67B-4955-B584-3CA7F062B6B9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
