@@ -158,7 +158,7 @@ namespace KonyvtarApi.Controllers
             }
         }
 
-        /*Készíts végpontot, amely egy könyvtár nevének részletéhez megadja, milyen településeken lehet az a könyvtár. A végpont url-je Telepules/KonyvtarNevreszlet/névrészlet ahol a névrészlet a könyvtár nevének egy részlete. Ha nincs megfelelő könyvtár, akkor a “Nincs megfelelő település” szöveggel térjen vissza 404-es státuszkóddal*/
+       
         [HttpGet("KonyvtarNevreszlet{nevReszlet}")]
         public IActionResult GetByKonyvtarNevReszlet(string nevReszlet)
         {
@@ -181,5 +181,8 @@ namespace KonyvtarApi.Controllers
             }
 
         }
+
+
+
     }
 }
