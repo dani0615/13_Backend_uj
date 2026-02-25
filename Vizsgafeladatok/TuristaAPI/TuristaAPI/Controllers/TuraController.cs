@@ -51,6 +51,31 @@ namespace TuristaAPI.Controllers
             }
         }
 
+        [HttpPut("Modosit")]
+        public async Task<IActionResult> PutTura(Tura tura) 
+        {
+            using (var context = new TuristadbContext()) 
+            {
+                try
+                {
+                    var modositando = context.Turas.Update(tura);
+                    if(modositando == null) 
+                    {
+                        return NotFound("Hiányzó túra!");
+                    }
+                    await context.SaveChangesAsync();
+                    return Ok("Sikeres módosítás!");
+
+
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                    
+                }
+            }
+        }
+
 
         
     }
