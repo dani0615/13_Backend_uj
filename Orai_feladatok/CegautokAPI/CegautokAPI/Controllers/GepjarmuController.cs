@@ -19,7 +19,7 @@ namespace CegautokAPI.Controllers
         }
 
 
-        [Authorize]
+        //[Authorize]
         [HttpGet("GetAll")]
         public IActionResult GetAll()
         {
@@ -115,7 +115,7 @@ namespace CegautokAPI.Controllers
                     }
                     else
                     {
-                        return NotFound(new { Error = $"Nincs ilyen ID-jú gépjármű: {id}" });
+                        return NotFound($"Nincs ilyen ID-jú gépjármű:");
                     }
                 }
                 catch (Exception ex)
@@ -129,13 +129,12 @@ namespace CegautokAPI.Controllers
         [HttpPost("NewJarmu")]
         public IActionResult NewJarmu(Gepjarmu jarmu)
         {
-            
             {
                 try
                 {
                     _context.Gepjarmus.Add(jarmu);
                     _context.SaveChanges();
-                    return Ok(new { Message = "Gépjármű sikeresen hozzáadva." });
+                    return StatusCode(201, "Sikeres mentés.");
                 }
                 catch (Exception ex)
                 {
@@ -148,19 +147,26 @@ namespace CegautokAPI.Controllers
         }
 
         [HttpPut("UpdateJarmu")]
-        public IActionResult UpdateJarmu(Gepjarmu jarmu) 
+        public IActionResult UpdateJarmu([FromBody]Gepjarmu jarmu) 
         {
            
             {
                 try
                 {
-                    _context.Gepjarmus.Update(jarmu);
+                    var existingJarmu = _context.Gepjarmus.Find(jarmu.Id);
+                    if (existingJarmu == null)
+                    {
+                        return NotFound("Jármű nem található");
+                    }
+
+                    _context.Entry(existingJarmu).CurrentValues.SetValues(jarmu);
+                   //_context.Gepjarmus.Update(jarmu);
                     _context.SaveChanges();
-                    return Ok(new { Message = "Gépjármű sikeresen frissítve." });
+                    return Ok("Gépjármű sikeresen frissítve.");
                 }
                 catch (Exception ex)
                 {
-                    return BadRequest(new { Error = $"Hiba a gépjármű frissítésekor: {ex.Message}" });
+                    return BadRequest($"Hiba a gépjármű frissítésekor: {ex.Message}");
                 }
             }
         }
@@ -177,11 +183,11 @@ namespace CegautokAPI.Controllers
                     {
                         _context.Gepjarmus.Remove(jarmu);
                         _context.SaveChanges();
-                        return Ok(new { Message = "Gépjármű sikeresen törölve." });
+                        return Ok("Gépjármű sikeresen törölve.");
                     }
                     else
                     {
-                        return NotFound(new { Error = $"Nincs ilyen ID-jú gépjármű: {id}" });
+                        return NotFound($"Nincs ilyen ID-jú gépjármű");
                     }
                 }
                 catch (Exception ex)
